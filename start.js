@@ -1,3 +1,12 @@
+// # User Factory!
+
+// Look inside start.js - you will find a large array of data. This data describes users. Your job, should you choose to accept it, is to create a function (or functions) that covert this kind of data to user objects!
+
+// Each user should contain the following properties; `id`, `fullName`, `initials`, `birthYear` and `departments`. The `deparments` property should contain an array of strings. If some of the information is not available, its corresponding property should have the value "Unknown".
+
+// We need each user object to be stored in an array of users objects. Once you have ran your function (or functions), log the resulting array into your workstation terminal where a highly trained monkey will examine it for further processing. Perhaps even the very same monkey writing out these instructions.
+
+
 const userDataDump = [
   "1,Joel Peltonen,1921,Users|Admin|Sudo",
   "2,Joeltest Peltonentest,1921,Users",
@@ -15,3 +24,39 @@ const userDataDump = [
   "D,Cheesedude51,1951,Users",
   "E,cron,,System",
 ];
+
+
+const factoryUser = string => {
+  const userData = string.split(",");
+  let initialsResult = userData[1].match(/\b(\w)/g).join('.');
+  for (let i = 0; i < userData.length; i++) {
+        if (!userData[i]) {
+          userData[i] = "unknown";
+        } 
+        if (i === userData.length -1) {
+          const departments = userData[userData.length - 1].split("|");
+          userData[userData.length - 1] = departments;
+      } 
+      
+     }
+     return {
+       id: userData[0],
+       fullname: userData[1],
+       initials: initialsResult,
+       birthYear: userData[2],
+       departments: userData[3],
+   };
+  
+  };
+  const usersFactory = array => {
+      const users = [];
+      for (let i = 0; i < array.length; i++) {
+          users.push(factoryUser(array[i]));
+      }
+      return users;
+  };
+  console.log(usersFactory(userDataDump));
+
+  
+  // *bonus* We also need another, more different, function that gives us a list of all the departments found in the data dump, in alphabetical order.
+ // starting this one: function departmentList 
