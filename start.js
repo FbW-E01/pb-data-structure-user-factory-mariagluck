@@ -27,14 +27,14 @@ const userDataDump = [
 
 
 const factoryUser = string => {
-  const userData = string.split(",");
+  const userData = string.split(',');
   let initialsResult = userData[1].match(/\b(\w)/g).join('.');
   for (let i = 0; i < userData.length; i++) {
         if (!userData[i]) {
           userData[i] = "unknown";
         } 
         if (i === userData.length -1) {
-          const departments = userData[userData.length - 1].split("|");
+          const departments = userData[userData.length - 1].split('|');
           userData[userData.length - 1] = departments;
       } 
       
@@ -56,7 +56,53 @@ const factoryUser = string => {
       return users;
   };
   console.log(usersFactory(userDataDump));
+  
 
   
   // *bonus* We also need another, more different, function that gives us a list of all the departments found in the data dump, in alphabetical order.
- // starting this one: function departmentList 
+
+//this one way:
+const newDataDump = usersFactory(userDataDump); //helper
+
+//list of departments
+let listDep = newDataDump.map(value => value.departments);
+
+//first merge all departments into 1 array
+let fullList = listDep.reduce(function (a, b) { return a.concat(b); });
+
+//second delete duplicates in the array
+const shortList = fullList.filter((item, index) => fullList.indexOf(item) === index);
+
+//finally sort them alphabetically
+const departmentsSorted = shortList.sort();
+console.log(departmentsSorted);
+//prints : [ 'Admin', 'Sudo', 'System', 'Users' ]
+
+
+
+//this is another way  
+ const listDepartments = (input) => {
+     let userDataArray = [];
+     const allDepartments = [];
+     for (let i = 0; i < input.length; i++) {
+       userDataArray[i] = input[i].split(',');
+       allDepartments.push(userDataArray[i][3].split('|'));
+     }
+     
+     const departments = [];
+     for (let i = 0; i < allDepartments.length; i++) {
+       for (let j = 0; j < allDepartments[i].length; j++) {
+         if (!departments.includes(allDepartments[i][j])) {
+           departments.push(allDepartments[i][j]);
+         }
+       }  
+     }
+   
+     return departments.sort();
+ };
+    
+        
+console.log(listDepartments(userDataDump));
+//prints: [ 'Admin', 'Sudo', 'System', 'Users' ]
+
+
